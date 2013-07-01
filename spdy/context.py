@@ -77,16 +77,23 @@ class Context(object):
 
         if side == SERVER:
             self._stream_id = 2
+            # TODO: Add stream_id_peer auto-updating in the _parse_frame() method
+            self._stream_id_peer = 1
             self._ping_id = 2
         else:
             self._stream_id = 1
+            # TODO: Add stream_id_peer auto-updating in the _parse_frame() method
+            self._stream_id_peer = 0
             self._ping_id = 1
-
+        
+        self._last_stream_id = self._stream_id
+        
+        
     @property
     def next_stream_id(self):
-        sid = self._stream_id
+        self._last_stream_id = self._stream_id
         self._stream_id += 2
-        return sid
+        return self._last_stream_id
 
     @property
     def next_ping_id(self):
